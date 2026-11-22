@@ -1,6 +1,7 @@
 package com.reightvoid.jja.scanner;
 
 import com.reightvoid.jja.annotation.AdminModel;
+import com.reightvoid.jja.api.AdminModelConfig;
 import com.reightvoid.jja.core.AdminModelDefinition;
 import com.reightvoid.jja.core.AdminRegistry;
 
@@ -16,15 +17,13 @@ public class AdminModelScanner implements SmartInitializingSingleton {
 
     public AdminModelScanner(
             ApplicationContext context,
-            AdminRegistry registry
-    ) {
+            AdminRegistry registry) {
         this.context = context;
         this.registry = registry;
     }
 
     @Override
     public void afterSingletonsInstantiated() {
-
         for (String beanName : context.getBeanDefinitionNames()) {
 
             Class<?> beanType = context.getType(beanName);
@@ -33,26 +32,22 @@ public class AdminModelScanner implements SmartInitializingSingleton {
                 continue;
             }
 
-            Class<?> targetType =
-                    ClassUtils.getUserClass(beanType);
+            Class<?> targetType = ClassUtils.getUserClass(beanType);
 
-            AdminModel annotation =
-                    AnnotatedElementUtils.findMergedAnnotation(
-                            targetType,
-                            AdminModel.class
-                    );
+            AdminModel annotation = AnnotatedElementUtils.findMergedAnnotation(
+                    targetType,
+                    AdminModel.class);
 
             if (annotation == null) {
                 continue;
             }
-
+            AdminModelConfig conf = new AdminModelConfig();
+            conf.name(annotation.name());
+            conf.path(annotation.path());
             registry.register(
                     new AdminModelDefinition(
                             annotation.value(),
-                            annotation.name(),
-                            annotation.path()
-                    )
-            );
+                            conf));
         }
     }
 }

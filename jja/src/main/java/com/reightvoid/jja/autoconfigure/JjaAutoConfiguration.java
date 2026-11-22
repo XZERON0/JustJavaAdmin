@@ -1,5 +1,6 @@
 package com.reightvoid.jja.autoconfigure;
 
+import com.reightvoid.jja.controller.AdminController;
 import com.reightvoid.jja.core.AdminRegistry;
 import com.reightvoid.jja.scanner.AdminModelScanner;
 
@@ -25,4 +26,11 @@ public class JjaAutoConfiguration {
     ) {
         return new AdminModelScanner(context, registry);
     }
+    @Bean 
+    @ConditionalOnMissingBean 
+    public AdminController adminController(AdminRegistry registry)
+    {
+        return new AdminController(registry);
+    }
+    
 }

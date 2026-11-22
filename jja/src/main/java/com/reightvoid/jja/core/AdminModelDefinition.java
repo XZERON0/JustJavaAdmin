@@ -1,3 +1,16 @@
 package com.reightvoid.jja.core;
 
-public record AdminModelDefinition (Class<?> entityClass, String name, String path) {}
+import com.reightvoid.jja.api.AdminModelConfig;
+
+public record AdminModelDefinition (
+    Class<?> entityClass, 
+    AdminModelConfig config
+) {
+    public String name()
+    {
+        return config.getName();
+    }
+    public String path(){
+        return config.getPath();
+    }
+}
